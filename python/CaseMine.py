@@ -1,8 +1,17 @@
 from Case import Case
 
-class CaseVide(Case):
-    def __init__(self):
-        super().__init__(contenu="mine")  # Le contenu est vide (None)
-    
-    def afficher(self):
-        return "Cette case est une mine."
+class CaseMine(Case):
+    def __init__(self, x, y, minesAdjascentes):
+        """
+        Initialise une case vide avec 0 mines adjacentes.
+        
+        :param x: Position x de la case
+        :param y: Position y de la case
+        :param minesAdjascentes : nombre de mines dans les 8 cases autour de la case
+        """
+        super().__init__(x, y, minesAdjascentes, isDecouvert=False, drapeau=False)
+        
+    def clicGauche(self):
+        if not self.drapeau:
+            self.isDecouvert = True
+            print(f"Case mine découverte à la position ({self.x}, {self.y}). Jeu perdu")
