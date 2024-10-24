@@ -8,7 +8,7 @@ class Case(ABC):
         self.isDecouvert = False
         self.minesAdjacentes = minesAdjacentes
         self.drapeau = False
-        self.isMine
+        self.isMine = False
     
     @abstractmethod
     def clicGauche(self):

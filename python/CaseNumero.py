@@ -11,6 +11,6 @@ class CaseNumero(Case):
         """
         if not self.isDecouvert and not self.drapeau:
             self.isDecouvert = True
-            print(f"Case vide découverte à la position ({self.x}, {self.y})")
+            print(f"{self.minesAdjacentes} découvert à la position ({self.x}, {self.y})")
         else:
             print(f"Action impossible : {'drapeau présent' if self.drapeau else 'case déjà découverte'}")

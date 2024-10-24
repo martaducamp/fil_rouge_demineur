@@ -64,12 +64,34 @@ class Grille:
         :param y: Coordonnée y de la case à découvrir
         """
         if x < 0 or x >= self.longueur or y < 0 or y >= self.largeur:
-            print("Coordonnées hors de la grille.")
+            print("Case hors de la grille.")
             return
         
         case = self.grille[x][y]
         case.clicGauche()
+    
+    def changeDrapeau(self, x: int, y: int):
+        """
+        Ajoute ou enlève un drapeau sur une case.
+
+        Parameters
+        ----------
+        x : int
+            coordonnée x de la case à découvrir.
+        y : int
+            Coordonnée y de la case à découvrir.
+
+        Returns
+        -------
+        None.
+
+        """
+        if x < 0 or x >= self.longueur or y < 0 or y >= self.largeur:
+            print("Case hors de la grille.")
+            return
         
+        case = self.grille[x][y]
+        case.clicDroit()
 
     def chercherMinesAdjacentes(self, x: int, y: int) -> int:
         """
@@ -131,7 +153,6 @@ class Grille:
         mines_placees = 0
         
         while mines_placees < nombre_mines:
-            
             x = random.randint(0,self.longueur-1)
             y = random.randint(0, self.largeur-1)
             
@@ -152,11 +173,12 @@ class Grille:
                 # Conditions pour afficher les cases (cela peut dépendre de ton implémentation de la classe Case)
                 if not case.isDecouvert:
                     print("■", end=" ")  # Symbole pour une case non découverte
-                elif case.minesAdjascentes > 0:
-                    print(case.minesAdjascentes, end=" ")  # Nombre de mines adjacentes
-                elif case.drapeau = True:
+                elif case.minesAdjacentes > 0:
+                    print(case.minesAdjacentes, end=" ")  # Nombre de mines adjacentes
+                elif case.drapeau == True:
                     print("⚑", end =" ")
-                elif case.
+                elif case.isMine == True:
+                    print("💣", end =" ")
                 else:
                     print(" ", end=" ")  # Case vide découverte
 
