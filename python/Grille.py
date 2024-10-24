@@ -57,6 +57,54 @@ class Grille:
         
         print(f"Grille créée avec la difficulté {difficulte}: {self.longueur}x{self.largeur}.")
         
+    def decouvrirCase(self, x: int, y: int):
+        """
+        Découvre la case aux coordonnées (x, y) et effectue l'action correspondante selon le type de case.
+        :param x: Coordonnée x de la case à découvrir
+        :param y: Coordonnée y de la case à découvrir
+        """
+        if x < 0 or x >= self.longueur or y < 0 or y >= self.largeur:
+            print("Coordonnées hors de la grille.")
+            return
+        
+        case = self.grille[x][y]
+        case.clicGauche()
+        
+
+    def chercherMinesAdjacentes(self, x: int, y: int) -> int:
+        """
+        Cherche le nombre de mines dans les cases adjacentes à la case (x, y).
+        :param x: Coordonnée x de la case
+        :param y: Coordonnée y de la case
+        :return: Nombre de mines adjacentes
+        """
+        mines_adjacentes = 0
+        
+        # Parcourir les cases dans une couronne autour de (x, y)
+        for i in range(max(0, x - 1), min(self.longueur, x + 2)):  # De x-1 à x+1, sans dépasser les limites
+            for j in range(max(0, y - 1), min(self.largeur, y + 2)):  # De y-1 à y+1, sans dépasser les limites
+                if i == x and j == y:
+                    # Ne pas compter la case elle-même
+                    continue
+                # Vérifier si la case adjacente est une mine
+                if isinstance(self.grille[i][j], CaseMine):
+                    mines_adjacentes += 1
+        
+        return mines_adjacentes
+    
+    def placerNumeros(self):
+        """
+        Initialise les cases numérotées après avoir placé les mines.
+        """
+        for x in range(self.longueur):
+            for y in range(self.largeur):
+                if not isinstance(self.grille[x][y], CaseMine):
+                    # Chercher les mines adjacentes pour cette case
+                    nombre_mines = self.chercherMinesAdjacentes(x, y)
+                    if nombre_mines > 0:
+                        # Si des mines sont adjacentes, transformer la case en CaseNumero
+                        self.grille[x][y] = CaseNumero(x, y, nombre_mines)
+        
     def placerMines(self, difficulte):
         """
         Place les mines aléatoirement sur la grille en fonction de la difficulté,
@@ -84,8 +132,8 @@ class Grille:
         
         while mines_placees < nombre_mines:
             
-            x = random.randit(0,self.longueur-1)
-            y = random.randit(0, self.largeur-1)
+            x = random.randint(0,self.longueur-1)
+            y = random.randint(0, self.largeur-1)
             
             if not isinstance(self.grille[x][y], CaseMine) and not self.grille[x][y].isDecouvert:
                 self.grille[x][y] = CaseMine(x,y)
@@ -106,9 +154,13 @@ class Grille:
                     print("■", end=" ")  # Symbole pour une case non découverte
                 elif case.minesAdjascentes > 0:
                     print(case.minesAdjascentes, end=" ")  # Nombre de mines adjacentes
+                elif case.drapeau = True:
+                    print("⚑", end =" ")
+                elif case.
                 else:
                     print(" ", end=" ")  # Case vide découverte
 
             print()
+        
     
     

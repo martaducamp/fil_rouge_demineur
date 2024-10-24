@@ -9,7 +9,7 @@ class CaseMine(Case):
         :param y: Position y de la case
         :param minesAdjascentes : nombre de mines dans les 8 cases autour de la case
         """
-        super().__init__(x, y,minesAdjascentes=0, isDecouvert=False, drapeau=False)
+        super().__init__(x, y,minesAdjacentes=0, isDecouvert=False, drapeau=False, isMine = True)
         
     def clicGauche(self):
         if not self.drapeau:

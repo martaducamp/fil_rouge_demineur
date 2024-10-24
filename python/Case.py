@@ -2,12 +2,13 @@ from abc import ABC, abstractmethod
 
 class Case(ABC):
 
-    def __init__(self, x, y, isDecouvert, minesAdjascentes, drapeau):
+    def __init__(self, x, y, isDecouvert, minesAdjacentes, drapeau, isMine):
         self.x = x
         self.y = y
         self.isDecouvert = False
-        self.minesAdjascentes = minesAdjascentes
+        self.minesAdjacentes = minesAdjacentes
         self.drapeau = False
+        self.isMine
     
     @abstractmethod
     def clicGauche(self):

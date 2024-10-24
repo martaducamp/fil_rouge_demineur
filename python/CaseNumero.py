@@ -1,8 +1,8 @@
 from Case import Case
 
 class CaseNumero(Case):
-    def __init__(self):
-        super().__init__(contenu="numero")  # Le contenu est vide (None)
+    def __init__(self, x, y, minesAdjacentes):
+        super().__init__(x, y, isDecouvert=False, minesAdjacentes=minesAdjacentes, drapeau=False, isMine = False)
     
     def clicGauche(self):
         """
