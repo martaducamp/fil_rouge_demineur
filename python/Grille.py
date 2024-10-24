@@ -17,7 +17,7 @@ class Grille:
         "extraterrestre": {"taille_grille": (100, 100), "mines": 1000}
     }
     
-    def __init__(self, longueur, largeur):
+    def __init__(self, longueur, largeur, difficulte):
         """
         Initialisation de la classe
 
@@ -35,20 +35,21 @@ class Grille:
         """
         self.longueur = longueur
         self.largeur =  largeur
+        self.difficulte =  difficulte
         self.grille = []
         
-    def creerGrille(self, difficulte):
+    def creerGrille(self):
         """
         Crée la grille en fonction de la difficulté choisie.
         :param difficulte: Le niveau de difficulté ("facile", "intermediaire", "avance")
         """
-        if difficulte not in self.DIFFICULTE:
-            raise ValueError(f"Difficulté inconnue : {difficulte}")
+        if self.difficulte not in self.DIFFICULTE:
+            raise ValueError(f"Difficulté inconnue : {self.difficulte}")
         
         # Récupération des paramètres de la difficulté
-        params = self.DIFFICULTE[difficulte]
+        params = self.DIFFICULTE[self.difficulte]
         taille_grille = params["taille_grille"]  # (longueur, largeur)
-        nombre_mines = params["mines"]  # Nombre de mines
+        # nombre_mines = params["mines"]  # Nombre de mines
 
         # Redimensionner la grille en fonction de la difficulté
         self.longueur, self.largeur = taille_grille
@@ -56,7 +57,7 @@ class Grille:
         # Initialisation d'une grille vide
         self.grille = [[CaseVide(x, y) for y in range(self.largeur)] for x in range(self.longueur)]
         
-        print(f"Grille créée avec la difficulté {difficulte}: {self.longueur}x{self.largeur}.")
+        print(f"Grille créée avec la difficulté {self.difficulte}: {self.longueur}x{self.largeur}.")
         
     def decouvrirCase(self, x: int, y: int):
         """
@@ -77,19 +78,19 @@ class Grille:
         """
         # Vérifier si la case est déjà découverte ou si ce n'est pas une case vide ou un numéro
         case_depart = self.grille[x][y]
-        if case_depart.isDecouvert:
-            return  # Si la case est déjà découverte, rien à faire
+        # if case_depart.isDecouvert:
+        #     return  # Si la case est déjà découverte, rien à faire
         
         # File d'attente pour BFS
         file_a_traiter = deque([(x, y)])
-        
+        print("i'm there")
         while file_a_traiter:
             cx, cy = file_a_traiter.popleft()
             case_actuelle = self.grille[cx][cy]
 
             # Découvrir la case si elle ne l'est pas déjà
             if not case_actuelle.isDecouvert:
-                case_actuelle.clicDroit()
+                case_actuelle.clicGauche()
             
             # Si c'est une case numérotée, on s'arrête là (on ne continue pas la propagation)
             if isinstance(case_actuelle, CaseNumero):
@@ -175,15 +176,12 @@ class Grille:
                         # Si des mines sont adjacentes, transformer la case en CaseNumero
                         self.grille[x][y] = CaseNumero(x, y, nombre_mines)
         
-    def placerMines(self, difficulte):
+    def placerMines(self):
         """
         Place les mines aléatoirement sur la grille en fonction de la difficulté,
         en s'assurant que les mines ne sont pas placées sur les cases découvertes.
 
-        Parameters
-        ----------
-        difficulte : str
-            Le niveau de difficulté de la grille.
+
 
         Returns
         -------
@@ -191,11 +189,11 @@ class Grille:
 
         """
         
-        if difficulte not in self.DIFFICULTE:
-            raise ValueError(f"Difficulté inconnue : {difficulte}")
+        if self.difficulte not in self.DIFFICULTE:
+            raise ValueError(f"Difficulté inconnue : {self.difficulte}")
         
         # Récupération des paramètres de la difficulté
-        params = self.DIFFICULTE[difficulte]
+        params = self.DIFFICULTE[self.difficulte]
         nombre_mines = params["mines"]
         
         mines_placees = 0
