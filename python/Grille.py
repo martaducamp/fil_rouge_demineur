@@ -3,6 +3,7 @@ from CaseNumero import CaseNumero
 from CaseVide import CaseVide
 from CaseMine import CaseMine
 
+from collections import deque
 import numpy as np
 import random
 
@@ -69,6 +70,53 @@ class Grille:
         
         case = self.grille[x][y]
         case.clicGauche()
+        
+    def propagation(self, x, y):
+        """
+        Découvre toutes les cases vides connectées à la case (x, y) ainsi que les cases numérotées adjacentes.
+        """
+        # Vérifier si la case est déjà découverte ou si ce n'est pas une case vide ou un numéro
+        case_depart = self.grille[x][y]
+        if case_depart.isDecouvert:
+            return  # Si la case est déjà découverte, rien à faire
+        
+        # File d'attente pour BFS
+        file_a_traiter = deque([(x, y)])
+        
+        while file_a_traiter:
+            cx, cy = file_a_traiter.popleft()
+            case_actuelle = self.grille[cx][cy]
+
+            # Découvrir la case si elle ne l'est pas déjà
+            if not case_actuelle.isDecouvert:
+                case_actuelle.clicDroit()
+            
+            # Si c'est une case numérotée, on s'arrête là (on ne continue pas la propagation)
+            if isinstance(case_actuelle, CaseNumero):
+                continue
+
+            # Si c'est une case vide, on explore ses voisins
+            for nx, ny in self.get_voisins(cx, cy):
+                voisin = self.grille[nx][ny]
+
+                # Si le voisin n'est pas découvert et n'est pas une mine, on l'ajoute à la file d'attente
+                if not voisin.isDecouvert and not isinstance(voisin, CaseMine):
+                    file_a_traiter.append((nx, ny))
+    
+    def get_voisins(self, x, y):
+        """
+        Retourne une liste des coordonnées des voisins valides (dans les limites de la grille) autour de la case (x, y).
+        """
+        voisins = []
+        for dx in [-1, 0, 1]:
+            for dy in [-1, 0, 1]:
+                if dx == 0 and dy == 0:
+                    continue  # Ne pas ajouter la case elle-même
+                nx, ny = x + dx, y + dy
+                # Vérifier si les nouvelles coordonnées sont dans les limites de la grille
+                if 0 <= nx < self.longueur and 0 <= ny < self.largeur:
+                    voisins.append((nx, ny))
+        return voisins
     
     def changeDrapeau(self, x: int, y: int):
         """

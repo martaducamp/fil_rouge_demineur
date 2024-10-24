@@ -38,6 +38,7 @@ class Jeu:
         
         # Initialisation de la grille sans placer les mines au début
         self.grille.creerGrille(self.difficulte)
+        self.grille.afficherGrille()
 
     def jouer(self):
         """
@@ -51,18 +52,20 @@ class Jeu:
             try:
                 x = int(input("Entrez la coordonnée x: "))
                 y = int(input("Entrez la coordonnée y: "))
+                action = str(input("Entrez le type d'action (f pour drapeau et d pour découvrir): "))
             except ValueError:
                 print("Coordonnées invalides.")
                 continue
             
             # Traiter le coup du joueur
-            self.traiterCoup(x, y)
+            self.traiterCoup(x, y, action)
+            self.grille.afficherGrille()
             
             # Condition de victoire ou de fin de jeu à gérer ici
             if self.finJeu():
                 break
 
-    def traiterCoup(self, x: int, y: int):
+    def traiterCoup(self, x: int, y: int, action: str):
         """
         Traite le coup du joueur. Découvre la case et place les mines si c'est la première action.
         """
@@ -71,8 +74,12 @@ class Jeu:
             self.grille.placerMines(self.difficulte)
             self.premiereAction = False
         
-        # Découvrir la case à la position donnée
-        self.grille.decouvrirCase(x, y)
+        if action == "d":
+            self.grille.decouvrirCase(x, y)
+        elif action == "f":
+            self.grille.changeDrapeau(x,y)
+        else:
+            print("Action non existante.")
     
     def finJeu(self):
         """
