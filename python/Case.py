@@ -12,8 +12,8 @@ class Case(ABC):
     @abstractmethod
     def clicGauche(self):
         """Méthode abstraite qui doit être implémentée dans les classes dérivées"""
-        pass
-        # raise NotImplementedError
+        
+        raise NotImplementedError
     
     def clicDroit(self, drapeau):
         drapeau = not drapeau
