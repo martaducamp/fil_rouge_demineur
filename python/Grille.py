@@ -171,16 +171,16 @@ class Grille:
                 case = self.grille[x][y]
                 
                 # Conditions pour afficher les cases (cela peut dépendre de ton implémentation de la classe Case)
-                if not case.isDecouvert:
-                    print("■", end=" ")  # Symbole pour une case non découverte
-                elif case.minesAdjacentes > 0:
-                    print(case.minesAdjacentes, end=" ")  # Nombre de mines adjacentes
-                elif case.drapeau == True:
+                if case.drapeau:
                     print("⚑", end =" ")
-                elif case.isMine == True:
-                    print("💣", end =" ")
+                elif not case.isDecouvert:
+                    print("■", end=" ")  
+                elif case.minesAdjacentes > 0:
+                    print(case.minesAdjacentes, end=" ") 
+                elif case.isMine:
+                    print("X", end =" ")
                 else:
-                    print(" ", end=" ")  # Case vide découverte
+                    print(" ", end=" ")
 
             print()
         

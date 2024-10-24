@@ -16,9 +16,12 @@ class Case(ABC):
         
         raise NotImplementedError
     
-    def clicDroit(self, drapeau):
-        drapeau = not drapeau
-        print(f"Drapeau {'placé' if self.drapeau else 'retiré'} sur la case vide ({self.x}, {self.y})")
+    def clicDroit(self):
+        if not self.isDecouvert:
+            self.drapeau = not self.drapeau
+            print(f"Drapeau {'placé' if self.drapeau else 'retiré'} sur la case ({self.x}, {self.y})")
+        else:
+            print(f"Case ({self.x}, {self.y}) découverte. Impossible de placer un drapeau")
         
 
         
