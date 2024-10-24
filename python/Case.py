@@ -12,8 +12,10 @@ class Case(ABC):
     @abstractmethod
     def clicGauche(self):
         """Méthode abstraite qui doit être implémentée dans les classes dérivées"""
-        pass
+        raise NotImplementedError
     
     def clicDroit(self, drapeau):
         drapeau = not drapeau
         print(f"Drapeau {'placé' if self.drapeau else 'retiré'} sur la case vide ({self.x}, {self.y})")
+        
+        

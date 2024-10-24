@@ -1,5 +1,7 @@
 from Case import Case
 
+import numpy as np
+
 class Grille:
     
     DIFFICULTE = {
@@ -31,7 +33,28 @@ class Grille:
         # Redimensionner la grille en fonction de la difficulté
         self.longueur, self.largeur = taille_grille
 
-        # Initialisation d'une grille vide (avec des instances de Case, CaseVide, etc.)
+        # Initialisation d'une grille vide
         self.grille = [[Case(x, y, False, 0, False) for y in range(self.largeur)] for x in range(self.longueur)]
         
         print(f"Grille créée avec la difficulté {difficulte}: {self.longueur}x{self.largeur} avec {nombre_mines} mines.")
+        
+    def afficherGrille(self):
+        """
+        Affiche la grille dans la console.
+        """
+        
+        for x in range(self.longueur):
+            for y in range(self.largeur):
+                case = self.grille[x][y]
+                
+                # Conditions pour afficher les cases (cela peut dépendre de ton implémentation de la classe Case)
+                if not case.isDecouvert:
+                    print("■", end=" ")  # Symbole pour une case non découverte
+                elif case.minesAdjascentes > 0:
+                    print(case.minesAdjascentes, end=" ")  # Nombre de mines adjacentes
+                else:
+                    print(" ", end=" ")  # Case vide découverte
+
+            print()
+    
+    
