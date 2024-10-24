@@ -1,4 +1,7 @@
 from Case import Case
+from CaseNumero import CaseNumero
+from CaseVide import CaseVide
+from CaseMine import CaseMine
 
 import numpy as np
 
@@ -34,9 +37,10 @@ class Grille:
         self.longueur, self.largeur = taille_grille
 
         # Initialisation d'une grille vide
-        self.grille = [[Case(x, y, False, 0, False) for y in range(self.largeur)] for x in range(self.longueur)]
+        self.grille = [[CaseVide(x, y) for y in range(self.largeur)] for x in range(self.longueur)]
         
-        print(f"Grille créée avec la difficulté {difficulte}: {self.longueur}x{self.largeur} avec {nombre_mines} mines.")
+        print(f"Grille créée avec la difficulté {difficulte}: {self.longueur}x{self.largeur}.")
+        
         
     def afficherGrille(self):
         """
