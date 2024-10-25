@@ -230,5 +230,23 @@ class Grille:
 
             print()
         
+    def defaite(self):
+        if self.case.isMine == True:
+            return True
+        else :
+            return False
+    
+    def victoire(self):
+        """
+        Vérifie si le jeu est terminé (victoire ou défaite).
+        :return: True si le jeu est terminé, sinon False.
+        """
+        for ligne in self.grille:
+            for case in ligne:
+                if not case.isMine and not case.isDecouvert:
+                    return False  
+        
+        return True  # Toutes les cases non-bombes sont dévoilées
+        
     
     

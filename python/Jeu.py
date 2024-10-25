@@ -62,7 +62,11 @@ class Jeu:
             self.grille.afficherGrille()
             
             # Condition de victoire ou de fin de jeu à gérer ici
-            if self.finJeu():
+            if self.grille.victoire():
+                print("Vous avez gagné !")
+                break
+            if self.grille.defaite():
+                print("Vous avez perdu :(")
                 break
 
     def traiterCoup(self, x: int, y: int, action: str):
@@ -75,23 +79,13 @@ class Jeu:
             self.premiereAction = False
         
         if action == "d":
-            self.grille.decouvrirCase(x, y)
+            self.grille.propager(x, y)
         elif action == "f":
             self.grille.changeDrapeau(x,y)
         else:
             print("Action non existante.")
     
-    def finJeu(self):
-        """
-        Vérifie si le jeu est terminé (victoire ou défaite).
-        :return: True si le jeu est terminé, sinon False.
-        """
-        # Ici, tu pourrais ajouter une logique pour vérifier si toutes les cases non-mines ont été découvertes
-        # Par exemple, pour vérifier si toutes les cases sans mines sont découvertes (victoire)
-        # ou si une mine a été découverte (défaite).
-        
-        # Par exemple, condition pour quitter la boucle de jeu
-        return False  # À ajuster selon tes conditions de fin de jeu
+
 
     
     
