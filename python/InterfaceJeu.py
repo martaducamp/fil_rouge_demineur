@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QGridLayout, QPushButton, QMessageBox
 from PyQt5.QtCore import Qt
 
@@ -51,7 +52,10 @@ class InterfaceJeu(QMainWindow):
             L'événement de clic de souris pour déterminer si le clic est gauche ou droit.
         """
         x, y = bouton.x, bouton.y
-        action_type = 'd' if event.button() == Qt.LeftButton else 'f'
+        if event.button() == Qt.LeftButton:
+            action_type = 'd'
+        if event.button() == Qt.RightButton:
+            action_type = 'f'
         
         # Traite le coup du joueur dans la logique du jeu
         self.jeu.traiterCoup(x, y, action_type)
@@ -86,7 +90,7 @@ class InterfaceJeu(QMainWindow):
                         bouton.setText("")
                     bouton.setEnabled(False)
                 elif case.drapeau:
-                    bouton.setText("⚑")
+                    bouton.setText("🚩")
                 else:
                     bouton.setText("")
     
