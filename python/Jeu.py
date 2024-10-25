@@ -34,10 +34,10 @@ class Jeu:
             raise ValueError(f"Niveau de difficulté inconnu : {self.difficulte}")
         
         longueur, largeur = params["taille_grille"]
-        self.grille = Grille(longueur, largeur)
+        self.grille = Grille(longueur, largeur, self.difficulte)
         
         # Initialisation de la grille sans placer les mines au début
-        self.grille.creerGrille(self.difficulte)
+        self.grille.creerGrille()
         self.grille.afficherGrille()
 
     def jouer(self):
@@ -65,7 +65,7 @@ class Jeu:
             if self.grille.victoire():
                 print("Vous avez gagné !")
                 break
-            if self.grille.defaite():
+            if self.grille.defaite(x,y):
                 print("Vous avez perdu :(")
                 break
 
@@ -74,16 +74,23 @@ class Jeu:
         Traite le coup du joueur. Découvre la case et place les mines si c'est la première action.
         """
         if self.premiereAction:
-            # Premier coup : on place les mines après le premier clic
-            self.grille.placerMines(self.difficulte)
-            self.premiereAction = False
-        
-        if action == "d":
-            self.grille.propager(x, y)
-        elif action == "f":
-            self.grille.changeDrapeau(x,y)
-        else:
-            print("Action non existante.")
+            if action == "d":
+                self.grille.decouvrirCase(x,y)
+                self.grille.placerMines()
+                self.grille.placerNumeros()
+                self.grille.propagation(x,y)
+                self.premiereAction = False
+            elif action == "f":
+                self.grille.changeDrapeau(x,y)
+            else:
+                print("Action non existante.")
+        else :
+            if action == "d":
+                self.grille.propagation(x, y)
+            elif action == "f":
+                self.grille.changeDrapeau(x,y)
+            else:
+                print("Action non existante.")
     
 
 

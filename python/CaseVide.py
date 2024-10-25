@@ -8,7 +8,7 @@ class CaseVide(Case):
         :param x: Position x de la case
         :param y: Position y de la case
         """
-        super().__init__(x, y, isDecouvert=False, minesAdjacentes=0, drapeau=False, isMine = False)
+        super().__init__(x, y, isDecouvert=False, minesAdjacentes=0, drapeau=False)
     
 
     def clicGauche(self):
@@ -18,6 +18,6 @@ class CaseVide(Case):
         """
         if not self.isDecouvert and not self.drapeau:
             self.isDecouvert = True
-            print(f"Case vide découverte à la position ({self.x}, {self.y})")
+            # print(f"Case vide découverte à la position ({self.x}, {self.y})")
         else:
             print(f"Action impossible : {'drapeau présent' if self.drapeau else 'case déjà découverte'}")

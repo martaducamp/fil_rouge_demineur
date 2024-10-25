@@ -76,14 +76,8 @@ class Grille:
         """
         Découvre toutes les cases vides connectées à la case (x, y) ainsi que les cases numérotées adjacentes.
         """
-        # Vérifier si la case est déjà découverte ou si ce n'est pas une case vide ou un numéro
-        case_depart = self.grille[x][y]
-        # if case_depart.isDecouvert:
-        #     return  # Si la case est déjà découverte, rien à faire
-        
-        # File d'attente pour BFS
+
         file_a_traiter = deque([(x, y)])
-        print("i'm there")
         while file_a_traiter:
             cx, cy = file_a_traiter.popleft()
             case_actuelle = self.grille[cx][cy]
@@ -221,17 +215,18 @@ class Grille:
                     print("⚑", end =" ")
                 elif not case.isDecouvert:
                     print("■", end=" ")  
+                elif isinstance(case, CaseMine):
+                    print("X", end =" ")
                 elif case.minesAdjacentes > 0:
                     print(case.minesAdjacentes, end=" ") 
-                elif case.isMine:
-                    print("X", end =" ")
                 else:
                     print(" ", end=" ")
 
             print()
         
-    def defaite(self):
-        if self.case.isMine == True:
+    def defaite(self, x, y):
+        case = self.grille[x][y]
+        if isinstance(case, CaseMine):
             return True
         else :
             return False
@@ -243,7 +238,7 @@ class Grille:
         """
         for ligne in self.grille:
             for case in ligne:
-                if not case.isMine and not case.isDecouvert:
+                if not isinstance(case, CaseMine) and not case.isDecouvert:
                     return False  
         
         return True  # Toutes les cases non-bombes sont dévoilées
