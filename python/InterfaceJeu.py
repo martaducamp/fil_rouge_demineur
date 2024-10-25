@@ -1,6 +1,9 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QGridLayout, QPushButton, QMessageBox
 from PyQt5.QtCore import Qt
+
+
 from Jeu import Jeu  # Importe ta classe Jeu
+from CaseBouton import CaseBouton
 import sys
 
 class InterfaceJeu(QMainWindow):
@@ -100,24 +103,16 @@ class InterfaceJeu(QMainWindow):
                     bouton.setStyleSheet("color: red")
                 bouton.setEnabled(False)
 
-class CaseBouton(QPushButton):
-    """
-    Classe personnalisée de QPushButton qui permet de stocker les coordonnées de la case.
-    """
-    def __init__(self, x, y):
-        super().__init__()
-        self.x = x
-        self.y = y
+    def lancer_interface(difficulte):
+        """
+        Fonction principale pour lancer l'interface graphique avec le niveau de difficulté.
+        """
+        app = QApplication(sys.argv)
+        interface = InterfaceJeu(difficulte)
+        sys.exit(app.exec_())
 
-def lancer_interface(difficulte):
-    """
-    Fonction principale pour lancer l'interface graphique avec le niveau de difficulté.
-    """
-    app = QApplication(sys.argv)
-    interface = InterfaceJeu(difficulte)
-    sys.exit(app.exec_())
 
 # Pour lancer l'interface
 if __name__ == "__main__":
     difficulte = "facile"  # Choisir la difficulté ici
-    lancer_interface(difficulte)
+    InterfaceJeu.lancer_interface(difficulte)
