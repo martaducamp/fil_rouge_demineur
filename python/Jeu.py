@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from Grille import Grille
-# from CaseMine import CaseMine
 from Timer import Timer
 
 class Jeu:
