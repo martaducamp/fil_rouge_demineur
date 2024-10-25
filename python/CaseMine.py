@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from Case import Case
 
 class CaseMine(Case):
@@ -8,7 +9,7 @@ class CaseMine(Case):
         :param x: Position x de la case
         :param y: Position y de la case
         """
-        super().__init__(x, y,minesAdjacentes=0, isDecouvert=False, drapeau=False)
+        super().__init__(x, y,minesAdjacentes=0, isDecouvert=False, drapeau=False, isMine=True)
         
     def clicGauche(self):
         if not self.drapeau and not self.isDecouvert:

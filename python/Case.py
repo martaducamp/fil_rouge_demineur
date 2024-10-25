@@ -1,13 +1,15 @@
+# -*- coding: utf-8 -*-
 from abc import ABC, abstractmethod
 
 class Case(ABC):
 
-    def __init__(self, x, y, isDecouvert, minesAdjacentes, drapeau):
+    def __init__(self, x, y, isDecouvert, minesAdjacentes, drapeau, isMine):
         self.x = x
         self.y = y
         self.isDecouvert = isDecouvert
         self.minesAdjacentes = minesAdjacentes
         self.drapeau = drapeau
+        self.isMine = isMine
     
     @abstractmethod
     def clicGauche(self):

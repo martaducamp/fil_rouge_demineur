@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from Case import Case
 from CaseNumero import CaseNumero
 from CaseVide import CaseVide

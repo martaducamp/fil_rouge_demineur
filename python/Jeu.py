@@ -1,5 +1,6 @@
-from Grille import Grille #essayer de le déplacer
-from CaseMine import CaseMine
+# -*- coding: utf-8 -*-
+from Grille import Grille
+# from CaseMine import CaseMine
 from Timer import Timer
 
 class Jeu:
@@ -87,7 +88,7 @@ class Jeu:
                 print("Action non existante.")
         else :
             if action == "d":
-                if isinstance(self.grille.grille[x][y], CaseMine):
+                if self.grille.grille[x][y].isMine:
                     self.grille.decouvrirCase(x,y)
                 else :
                     self.grille.propagation(x, y)

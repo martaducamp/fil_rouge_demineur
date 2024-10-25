@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from Case import Case
 
 class CaseVide(Case):
@@ -8,7 +9,7 @@ class CaseVide(Case):
         :param x: Position x de la case
         :param y: Position y de la case
         """
-        super().__init__(x, y, isDecouvert=False, minesAdjacentes=0, drapeau=False)
+        super().__init__(x, y, isDecouvert=False, minesAdjacentes=0, drapeau=False, isMine=False)
     
 
     def clicGauche(self):
