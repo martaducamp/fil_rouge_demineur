@@ -227,10 +227,9 @@ class Grille:
         
     def defaite(self, x, y):
         case = self.grille[x][y]
-        if isinstance(case, CaseMine):
+        if isinstance(case, CaseMine) and case.isDecouvert:
             return True
-        else :
-            return False
+        return False
     
     def victoire(self):
         """
