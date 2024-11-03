@@ -66,7 +66,6 @@ class InterfaceJeu(QMainWindow):
         # Vérifie les conditions de fin de jeu
         if self.jeu.grille.victoire():
             QMessageBox.information(self, "Victoire", "Vous avez gagné !")
-            self.close()
         elif self.jeu.grille.defaite(x, y):
             QMessageBox.critical(self, "Défaite", "Vous avez perdu.")
             self.afficher_mines()
