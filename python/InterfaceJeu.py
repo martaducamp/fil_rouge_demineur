@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QGridLayout, QPushButton, QMessageBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QPushButton, QMessageBox
 from PyQt5.QtCore import Qt
 
-
-from Jeu import Jeu  # Importe ta classe Jeu
+from Jeu import Jeu
 from CaseBouton import CaseBouton
 import sys
 
@@ -12,7 +11,8 @@ class InterfaceJeu(QMainWindow):
         super().__init__()
         self.setWindowTitle("Démineur")
         
-        # Initialise le jeu
+        # Initialise la difficulté et le jeu
+        self.difficulte = difficulte
         self.jeu = Jeu(difficulte)
         self.jeu.initialiser_jeu()
         
@@ -21,11 +21,42 @@ class InterfaceJeu(QMainWindow):
         self.initUI()
         
     def initUI(self):
-        # Création d'un widget central et d'un layout de grille
+        # Création d'un widget central et d'un layout principal vertical
         widget_central = QWidget(self)
         self.setCentralWidget(widget_central)
         
-        grille_layout = QGridLayout(widget_central)
+        # Layout principal
+        self.layout_principal = QVBoxLayout(widget_central)
+
+        # Création d'un layout pour les boutons de contrôle
+        layout_boutons = QHBoxLayout()
+        
+        # Bouton pour redémarrer la partie
+        bouton_redemarrer = QPushButton("Redémarrer", self)
+        bouton_redemarrer.clicked.connect(self.redemarrer)
+        layout_boutons.addWidget(bouton_redemarrer)
+        
+        # Boutons pour changer la difficulté
+        for niveau in ["facile", "intermediaire", "avance"]:
+            bouton_difficulte = QPushButton(niveau.capitalize(), self)
+            bouton_difficulte.clicked.connect(lambda _, n=niveau: self.changer_difficulte(n))
+            layout_boutons.addWidget(bouton_difficulte)
+        
+        # Ajouter le layout des boutons au layout principal
+        self.layout_principal.addLayout(layout_boutons)
+
+        # Création initiale du layout de la grille
+        self.grille_layout = QGridLayout()
+        self.layout_principal.addLayout(self.grille_layout)
+        
+        self.creer_grille()
+        self.show()
+
+    def creer_grille(self):
+        """
+        Crée la grille de jeu dans l'interface.
+        """
+        self.boutons_grille.clear()
         
         for x in range(self.jeu.grille.longueur):
             ligne_boutons = []
@@ -34,46 +65,25 @@ class InterfaceJeu(QMainWindow):
                 bouton.setFixedSize(30, 30)
                 bouton.mousePressEvent = lambda event, bx=bouton: self.gestion_clic(bx, event)
                 
-                grille_layout.addWidget(bouton, x, y)
+                self.grille_layout.addWidget(bouton, x, y)
                 ligne_boutons.append(bouton)
             self.boutons_grille.append(ligne_boutons)
-        
-        self.show()
-    
+
     def gestion_clic(self, bouton, event):
-        """
-        Gère le clic souris sur une case pour découvrir ou placer un drapeau.
-        
-        Parameters
-        ----------
-        bouton : CaseBouton
-            Le bouton représentant la case cliquée.
-        event : QMouseEvent
-            L'événement de clic de souris pour déterminer si le clic est gauche ou droit.
-        """
         x, y = bouton.x, bouton.y
-        if event.button() == Qt.LeftButton:
-            action_type = 'd'
-        if event.button() == Qt.RightButton:
-            action_type = 'f'
+        action_type = 'd' if event.button() == Qt.LeftButton else 'f'
         
-        # Traite le coup du joueur dans la logique du jeu
         self.jeu.traiterCoup(x, y, action_type)
-        
-        # Met à jour l'affichage de la grille
         self.mettre_a_jour_grille()
         
-        # Vérifie les conditions de fin de jeu
         if self.jeu.grille.victoire():
             QMessageBox.information(self, "Victoire", "Vous avez gagné !")
+            self.close()
         elif self.jeu.grille.defaite(x, y):
             QMessageBox.critical(self, "Défaite", "Vous avez perdu.")
             self.afficher_mines()
     
     def mettre_a_jour_grille(self):
-        """
-        Met à jour l'affichage des boutons selon l'état de la grille de jeu.
-        """
         for x in range(self.jeu.grille.longueur):
             for y in range(self.jeu.grille.largeur):
                 case = self.jeu.grille.grille[x][y]
@@ -92,11 +102,8 @@ class InterfaceJeu(QMainWindow):
                     bouton.setText("🚩")
                 else:
                     bouton.setText("")
-    
+
     def afficher_mines(self):
-        """
-        Affiche toutes les mines en cas de défaite.
-        """
         for x in range(self.jeu.grille.longueur):
             for y in range(self.jeu.grille.largeur):
                 case = self.jeu.grille.grille[x][y]
@@ -106,16 +113,34 @@ class InterfaceJeu(QMainWindow):
                     bouton.setStyleSheet("color: red")
                 bouton.setEnabled(False)
 
+    def redemarrer(self):
+        """
+        Redémarre le jeu avec la difficulté actuelle.
+        """
+        # Supprime la grille actuelle
+        for i in reversed(range(self.grille_layout.count())): 
+            widget_to_remove = self.grille_layout.itemAt(i).widget()
+            self.grille_layout.removeWidget(widget_to_remove)
+            widget_to_remove.deleteLater()
+
+        # Redémarre le jeu avec la même difficulté
+        self.jeu = Jeu(self.difficulte)
+        self.jeu.initialiser_jeu()
+        
+        # Recrée la grille graphique
+        self.creer_grille()
+
+    def changer_difficulte(self, difficulte):
+        self.difficulte = difficulte
+        self.redemarrer()
+
+    @staticmethod
     def lancer_interface(difficulte):
-        """
-        Fonction principale pour lancer l'interface graphique avec le niveau de difficulté.
-        """
         app = QApplication(sys.argv)
         interface = InterfaceJeu(difficulte)
         sys.exit(app.exec_())
 
 
-# Pour lancer l'interface
 if __name__ == "__main__":
-    difficulte = "facile"  # Choisir la difficulté ici
+    difficulte = "facile"  # Choisir la difficulté initiale ici
     InterfaceJeu.lancer_interface(difficulte)
