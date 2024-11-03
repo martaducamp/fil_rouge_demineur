@@ -13,9 +13,7 @@ class Grille:
     DIFFICULTE = {
         "facile": {"taille_grille": (9, 9), "mines": 10},
         "intermediaire": {"taille_grille": (16, 16), "mines": 40},
-        "avance": {"taille_grille": (16, 30), "mines": 99},
-        "surhomme": {"taille_grille": (50 ,50), "mines": 500},
-        "extraterrestre": {"taille_grille": (100, 100), "mines": 1000}
+        "avance": {"taille_grille": (16, 30), "mines": 99}
     }
     
     def __init__(self, longueur, largeur, difficulte):
