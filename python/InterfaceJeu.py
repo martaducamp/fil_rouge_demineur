@@ -83,7 +83,7 @@ class InterfaceJeu(QMainWindow):
             QMessageBox.information(self, "Victoire", f"Vous avez gagné !\nTemps : {self.jeu.timer.get_time()}")
             self.interface_timer.stop()
         elif self.jeu.grille.defaite(x, y):
-            QMessageBox.critical(self, "Défaite", f"Vous avez perdu.\nTemps : {self.jeu.timer.get_time()}")
+            QMessageBox.critical(self, "Défaite", "Vous avez perdu.")
             self.afficher_mines()
     
     def mettre_a_jour_grille(self):

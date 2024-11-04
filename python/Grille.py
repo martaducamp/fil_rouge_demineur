@@ -56,8 +56,6 @@ class Grille:
         # Initialisation d'une grille vide
         self.grille = [[CaseVide(x, y) for y in range(self.largeur)] for x in range(self.longueur)]
         
-        print(f"Grille créée avec la difficulté {self.difficulte}: {self.longueur}x{self.largeur}.")
-        
     def decouvrirCase(self, x: int, y: int):
         """
         Découvre la case aux coordonnées (x, y) et effectue l'action correspondante selon le type de case.
@@ -65,7 +63,6 @@ class Grille:
         :param y: Coordonnée y de la case à découvrir
         """
         if x < 0 or x >= self.longueur or y < 0 or y >= self.largeur:
-            print("Case hors de la grille.")
             return
         
         case = self.grille[x][y]
@@ -129,7 +126,6 @@ class Grille:
 
         """
         if x < 0 or x >= self.longueur or y < 0 or y >= self.largeur:
-            print("Case hors de la grille.")
             return
         
         case = self.grille[x][y]
@@ -198,7 +194,6 @@ class Grille:
             if not isinstance(self.grille[x][y], CaseMine) and not self.grille[x][y].isDecouvert:
                 self.grille[x][y] = CaseMine(x,y)
                 mines_placees +=1
-        print(f"{nombre_mines} mines placées aléatoirement sur la grille.")
         
     def afficherGrille(self):
         """
@@ -239,7 +234,7 @@ class Grille:
                 if not isinstance(case, CaseMine) and not case.isDecouvert:
                     return False  
         
-        return True  # Toutes les cases non-bombes sont dévoilées
+        return True  
         
     
     
