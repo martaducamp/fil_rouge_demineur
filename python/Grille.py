@@ -258,7 +258,7 @@ class Grille:
         
     def afficherGrille(self):
         """
-        Affiche la grille dans la console.
+        Affiche la grille.
         """
         
         for x in range(self.longueur):
@@ -277,7 +277,7 @@ class Grille:
                 else:
                     print(" ", end=" ")
 
-            print()
+            #print()
         
     def defaite(self, x, y):
         """
