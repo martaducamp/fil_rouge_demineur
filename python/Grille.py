@@ -155,7 +155,7 @@ class Grille:
                     voisins.append((nx, ny))
         return voisins
     
-    def changeDrapeau(self, x: int, y: int):
+    def changeDrapeau(self, x, y):
         """
         Ajoute ou enlève un drapeau sur une case.
 
