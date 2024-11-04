@@ -1,0 +1,4 @@
+Changements sur le diagramme d'activité dans la version codée:
+
+- Il n'y a pas de compteur du nombre de drapeaux
+- Il ne se passe rien lors d'un clic gauche sur une case numéro découverte.
