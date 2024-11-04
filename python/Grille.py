@@ -39,8 +39,18 @@ class Grille:
         
     def creerGrille(self):
         """
-        Crée la grille en fonction de la difficulté choisie.
-        :param difficulte: Le niveau de difficulté ("facile", "intermediaire", "avance")
+        Crée la grille ne fonction de la fiddigulté choisie.
+
+        Raises
+        ------
+        ValueError
+            Si la difficulté rentrée n'est pas dans le dictionnaire.
+            Utile pour le débugage en console.
+
+        Returns
+        -------
+        None.
+
         """
         if self.difficulte not in self.DIFFICULTE:
             raise ValueError(f"Difficulté inconnue : {self.difficulte}")
@@ -56,11 +66,22 @@ class Grille:
         # Initialisation d'une grille vide
         self.grille = [[CaseVide(x, y) for y in range(self.largeur)] for x in range(self.longueur)]
         
-    def decouvrirCase(self, x: int, y: int):
+    def decouvrirCase(self, x, y):
         """
-        Découvre la case aux coordonnées (x, y) et effectue l'action correspondante selon le type de case.
-        :param x: Coordonnée x de la case à découvrir
-        :param y: Coordonnée y de la case à découvrir
+        Découvre la case aux coordonnées (x,y) et effectue l'action correspondante
+        selon le type de case.
+
+        Parameters
+        ----------
+        x : int
+            Coordonnée x de la case à découvrir.
+        y : int
+            Coordonnée y de la case à découvrir.
+
+        Returns
+        -------
+        None.
+
         """
         if x < 0 or x >= self.longueur or y < 0 or y >= self.largeur:
             return
@@ -71,6 +92,18 @@ class Grille:
     def propagation(self, x, y):
         """
         Découvre toutes les cases vides connectées à la case (x, y) ainsi que les cases numérotées adjacentes.
+
+        Parameters
+        ----------
+         x : int
+            Coordonnée x de la case à découvrir.
+        y : int
+            Coordonnée y de la case à découvrir.
+
+        Returns
+        -------
+        None.
+
         """
 
         file_a_traiter = deque([(x, y)])
@@ -97,6 +130,19 @@ class Grille:
     def get_voisins(self, x, y):
         """
         Retourne une liste des coordonnées des voisins valides (dans les limites de la grille) autour de la case (x, y).
+
+        Parameters
+        ----------
+        x : int
+            Coordonnée x de la case dont on cherche les vosins.
+        y : int
+            Coordonnée y de la case dont on cherche les vosins.
+
+        Returns
+        -------
+        voisins : list
+            liste des coordonnées des voisins.
+
         """
         voisins = []
         for dx in [-1, 0, 1]:
@@ -116,9 +162,9 @@ class Grille:
         Parameters
         ----------
         x : int
-            coordonnée x de la case à découvrir.
+            coordonnée x de la case.
         y : int
-            Coordonnée y de la case à découvrir.
+            Coordonnée y de la case.
 
         Returns
         -------
@@ -131,12 +177,22 @@ class Grille:
         case = self.grille[x][y]
         case.clicDroit()
 
-    def chercherMinesAdjacentes(self, x: int, y: int) -> int:
+    def chercherMinesAdjacentes(self, x, y):
         """
         Cherche le nombre de mines dans les cases adjacentes à la case (x, y).
-        :param x: Coordonnée x de la case
-        :param y: Coordonnée y de la case
-        :return: Nombre de mines adjacentes
+
+        Parameters
+        ----------
+        x : int
+            coordonnée x de la case.
+        y : int
+            Coordonnée y de la case.
+
+        Returns
+        -------
+        mines_adjacentes : int
+            Nombre de mines autour de la case.
+
         """
         mines_adjacentes = 0
         
@@ -155,6 +211,11 @@ class Grille:
     def placerNumeros(self):
         """
         Initialise les cases numérotées après avoir placé les mines.
+
+        Returns
+        -------
+        None.
+
         """
         for x in range(self.longueur):
             for y in range(self.largeur):
@@ -219,6 +280,23 @@ class Grille:
             print()
         
     def defaite(self, x, y):
+        """
+        Instancie les conditions de défaite pour chaque case cliquée
+
+        Parameters
+        ----------
+        x : int
+            coordonnée x de la case.
+        y : int
+            Coordonnée y de la case.
+
+        Returns
+        -------
+        bool
+            True si la case découverte est une mine.
+            False sinon.
+
+        """
         case = self.grille[x][y]
         if isinstance(case, CaseMine) and case.isDecouvert:
             return True
@@ -226,8 +304,13 @@ class Grille:
     
     def victoire(self):
         """
-        Vérifie si le jeu est terminé (victoire ou défaite).
-        :return: True si le jeu est terminé, sinon False.
+        Vérifie si le jeu est gagné.
+
+        Returns
+        -------
+        bool
+            True si le jeu est gagné, False sinon.
+
         """
         for ligne in self.grille:
             for case in ligne:
