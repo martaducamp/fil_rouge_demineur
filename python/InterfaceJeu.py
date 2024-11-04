@@ -7,7 +7,17 @@ from CaseBouton import CaseBouton
 import sys
 
 class InterfaceJeu(QMainWindow):
+    
     def __init__(self, difficulte):
+        """
+        Initialise l'interface du jeu Démineur avec la difficulté spécifiée.
+
+        Parameters
+        ----------
+        difficulte : str
+            Le niveau de difficulté sélectionné (facile, intermediaire, avance).
+
+        """
         super().__init__()
         self.setWindowTitle("Démineur")
         
@@ -26,6 +36,10 @@ class InterfaceJeu(QMainWindow):
         self.interface_timer.start(1000)
         
     def initUI(self):
+        """
+        Initialise l'interface utilisateur en créant le layout principal, les boutons de contrôle, 
+        la grille de jeu, et le chronomètre.
+        """
         widget_central = QWidget(self)
         self.setCentralWidget(widget_central)
         
@@ -41,7 +55,7 @@ class InterfaceJeu(QMainWindow):
         bouton_redemarrer.clicked.connect(self.redemarrer)
         layout_boutons.addWidget(bouton_redemarrer)
         
-        for niveau in ["facile", "moyen", "difficile"]:
+        for niveau in ["facile", "intermediaire", "avance"]:
             bouton_difficulte = QPushButton(niveau.capitalize(), self)
             bouton_difficulte.clicked.connect(lambda _, n=niveau: self.changer_difficulte(n))
             layout_boutons.addWidget(bouton_difficulte)
@@ -57,7 +71,7 @@ class InterfaceJeu(QMainWindow):
 
     def creer_grille(self):
         """
-        Crée la grille de jeu dans l'interface.
+        Crée et initialise la grille de jeu dans l'interface en générant des boutons pour chaque case.
         """
         self.boutons_grille.clear()
         
@@ -73,6 +87,17 @@ class InterfaceJeu(QMainWindow):
             self.boutons_grille.append(ligne_boutons)
 
     def gestion_clic(self, bouton, event):
+        """
+        Gère les clics de la souris sur les boutons de la grille, effectue l'action appropriée
+        en fonction du bouton de la souris (découverte ou drapeau) et vérifie les conditions de victoire et de défaite.
+
+        Parameters
+        ----------
+        bouton : CaseBouton
+            Le bouton qui a été cliqué.
+        event : QMouseEvent
+            L'événement de clic de la souris contenant le type de clic.
+        """
         x, y = bouton.x, bouton.y
         action_type = 'd' if event.button() == Qt.LeftButton else 'f'
         
@@ -87,6 +112,10 @@ class InterfaceJeu(QMainWindow):
             self.afficher_mines()
     
     def mettre_a_jour_grille(self):
+        """
+        Met à jour l'affichage de la grille de jeu en fonction de l'état actuel des cases,
+        affichant les mines, les drapeaux, et les nombres de mines adjacentes.
+        """
         for x in range(self.jeu.grille.longueur):
             for y in range(self.jeu.grille.largeur):
                 case = self.jeu.grille.grille[x][y]
@@ -103,10 +132,14 @@ class InterfaceJeu(QMainWindow):
                     bouton.setEnabled(False)
                 elif case.drapeau:
                     bouton.setText("🚩")
+                    bouton.setStyleSheet("color: red")
                 else:
                     bouton.setText("")
 
     def afficher_mines(self):
+        """
+        Affiche toutes les mines présentes sur la grille lorsque le joueur perd la partie.
+        """
         for x in range(self.jeu.grille.longueur):
             for y in range(self.jeu.grille.largeur):
                 case = self.jeu.grille.grille[x][y]
@@ -117,9 +150,15 @@ class InterfaceJeu(QMainWindow):
                 bouton.setEnabled(False)
 
     def update_timer_display(self):
+        """
+        Met à jour l'affichage du chronomètre dans l'interface en utilisant le temps actuel du jeu.
+        """
         self.timer_label.setText(self.jeu.timer.get_time())
 
     def redemarrer(self):
+        """
+        Redémarre le jeu en réinitialisant la grille, le chronomètre, et le niveau de difficulté actuel.
+        """
         self.interface_timer.stop()
         for i in reversed(range(self.grille_layout.count())): 
             widget_to_remove = self.grille_layout.itemAt(i).widget()
@@ -132,11 +171,27 @@ class InterfaceJeu(QMainWindow):
         self.interface_timer.start()
 
     def changer_difficulte(self, difficulte):
+        """
+        Change la difficulté du jeu et redémarre la partie avec le nouveau niveau.
+
+        Parameters
+        ----------
+        difficulte : str
+            Le nouveau niveau de difficulté choisi (facile, intermediaire, avance).
+        """
         self.difficulte = difficulte
         self.redemarrer()
 
     @staticmethod
     def lancer_interface(difficulte):
+        """
+        Lance l'application graphique du jeu avec le niveau de difficulté spécifié.
+
+        Parameters
+        ----------
+        difficulte : str
+            Le niveau de difficulté initial (facile, intermediaire, avance).
+        """
         app = QApplication(sys.argv)
         interface = InterfaceJeu(difficulte)
         sys.exit(app.exec_())
