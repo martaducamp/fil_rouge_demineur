@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QPushButton, QMessageBox
-from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QPushButton, QMessageBox, QLabel
+from PyQt5.QtCore import Qt, QTimer
 
 from Jeu import Jeu
 from CaseBouton import CaseBouton
@@ -20,36 +20,39 @@ class InterfaceJeu(QMainWindow):
         self.boutons_grille = []
         self.initUI()
         
+        #Initialisation du timer
+        self.interface_timer = QTimer()
+        self.interface_timer.timeout.connect(self.update_timer_display)
+        self.interface_timer.start(1000)
+        
     def initUI(self):
-        # Création d'un widget central et d'un layout principal vertical
         widget_central = QWidget(self)
         self.setCentralWidget(widget_central)
         
-        # Layout principal
         self.layout_principal = QVBoxLayout(widget_central)
 
-        # Création d'un layout pour les boutons de contrôle
+        # Affichage du chronomètre
+        self.timer_label = QLabel("00:00", self)
+        self.layout_principal.addWidget(self.timer_label)
+
+        # Boutons de contrôle
         layout_boutons = QHBoxLayout()
-        
-        # Bouton pour redémarrer la partie
         bouton_redemarrer = QPushButton("Redémarrer", self)
         bouton_redemarrer.clicked.connect(self.redemarrer)
         layout_boutons.addWidget(bouton_redemarrer)
         
-        # Boutons pour changer la difficulté
-        for niveau in ["facile", "intermediaire", "avance"]:
+        for niveau in ["facile", "moyen", "difficile"]:
             bouton_difficulte = QPushButton(niveau.capitalize(), self)
             bouton_difficulte.clicked.connect(lambda _, n=niveau: self.changer_difficulte(n))
             layout_boutons.addWidget(bouton_difficulte)
         
-        # Ajouter le layout des boutons au layout principal
         self.layout_principal.addLayout(layout_boutons)
 
-        # Création initiale du layout de la grille
+        # Grille de jeu
         self.grille_layout = QGridLayout()
         self.layout_principal.addLayout(self.grille_layout)
-        
         self.creer_grille()
+        
         self.show()
 
     def creer_grille(self):
@@ -77,10 +80,10 @@ class InterfaceJeu(QMainWindow):
         self.mettre_a_jour_grille()
         
         if self.jeu.grille.victoire():
-            QMessageBox.information(self, "Victoire", "Vous avez gagné !")
-            self.close()
+            QMessageBox.information(self, "Victoire", f"Vous avez gagné !\nTemps : {self.jeu.timer.get_time()}")
+            self.interface_timer.stop()
         elif self.jeu.grille.defaite(x, y):
-            QMessageBox.critical(self, "Défaite", "Vous avez perdu.")
+            QMessageBox.critical(self, "Défaite", f"Vous avez perdu.\nTemps : {self.jeu.timer.get_time()}")
             self.afficher_mines()
     
     def mettre_a_jour_grille(self):
@@ -113,22 +116,20 @@ class InterfaceJeu(QMainWindow):
                     bouton.setStyleSheet("color: red")
                 bouton.setEnabled(False)
 
+    def update_timer_display(self):
+        self.timer_label.setText(self.jeu.timer.get_time())
+
     def redemarrer(self):
-        """
-        Redémarre le jeu avec la difficulté actuelle.
-        """
-        # Supprime la grille actuelle
+        self.interface_timer.stop()
         for i in reversed(range(self.grille_layout.count())): 
             widget_to_remove = self.grille_layout.itemAt(i).widget()
             self.grille_layout.removeWidget(widget_to_remove)
             widget_to_remove.deleteLater()
 
-        # Redémarre le jeu avec la même difficulté
         self.jeu = Jeu(self.difficulte)
         self.jeu.initialiser_jeu()
-        
-        # Recrée la grille graphique
         self.creer_grille()
+        self.interface_timer.start()
 
     def changer_difficulte(self, difficulte):
         self.difficulte = difficulte

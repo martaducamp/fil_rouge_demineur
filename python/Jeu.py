@@ -22,7 +22,7 @@ class Jeu:
         
         self.difficulte = difficulte
         self.grille = None
-        # self.timer = None 
+        self.timer = Timer()
         self.premiereAction = True  # Indique si la première action a été réalisée
         
     def initialiser_jeu(self):
@@ -40,6 +40,7 @@ class Jeu:
         # Initialisation de la grille sans placer les mines au début
         self.grille.creerGrille()
         self.grille.afficherGrille()
+        self.timer.reset()
 
     def jouer(self):
         """
@@ -75,6 +76,7 @@ class Jeu:
         Traite le coup du joueur. Découvre la case et place les mines si c'est la première action.
         """
         if self.premiereAction:
+            self.timer.start()
             if action == "d":
                 self.grille.decouvrirCase(x,y)
                 self.grille.placerMines()
@@ -95,6 +97,9 @@ class Jeu:
                 self.grille.changeDrapeau(x,y)
             else:
                 print("Action non existante.")
+        
+        if self.grille.victoire() or self.grille.defaite(x, y):
+            self.timer.stop()
     
 
 
