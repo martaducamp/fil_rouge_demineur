@@ -4,18 +4,38 @@ from Case import Case
 class CaseVide(Case):
     def __init__(self, x, y):
         """
-        Initialise une case vide avec 0 mines adjacentes.
-        
-        :param x: Position x de la case
-        :param y: Position y de la case
+        Initialise une instance de CaseVide, représentant une case vide avec 0 mines adjacentes.
+
+        Parameters
+        ----------
+        x : int
+            Coordonnée en x de la case sur la grille.
+        y : int
+            Coordonnée en y de la case sur la grille.
+
+        Attributes
+        ----------
+        isDecouvert : bool
+            Indique si la case est découverte.
+        minesAdjacentes : int
+            Nombre de mines autour de cette case (0 pour CaseVide).
+        drapeau : bool
+            Indique si un drapeau est placé sur cette case.
+        isMine : bool
+            Toujours False pour CaseVide, indique que la case ne contient pas de mine.
         """
         super().__init__(x, y, isDecouvert=False, minesAdjacentes=0, drapeau=False, isMine=False)
     
-
     def clicGauche(self):
         """
         Action effectuée lors d'un clic gauche sur une case vide.
-        Dévoile la case si elle n'a pas de drapeau et qu'elle n'est pas déjà découverte.
+        
+        Si la case n'est pas déjà découverte et n'a pas de drapeau, elle est découverte
+        et son état `isDecouvert` passe à True.
+
+        Returns
+        -------
+        None
         """
         if not self.isDecouvert and not self.drapeau:
             self.isDecouvert = True

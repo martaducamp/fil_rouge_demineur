@@ -22,12 +22,22 @@ class Jeu:
         
         self.difficulte = difficulte
         self.grille = None
-        # self.timer = None 
+        self.timer = Timer()
         self.premiereAction = True  # Indique si la première action a été réalisée
         
     def initialiser_jeu(self):
         """
         Initialise la grille en fonction de la difficulté.
+
+        Raises
+        ------
+        ValueError
+            Erreur si la difficulté demandée n'est pas dans le dictionnaire.
+
+        Returns
+        -------
+        None.
+
         """
         # Création de la grille selon la difficulté
         params = Grille.DIFFICULTE.get(self.difficulte)
@@ -40,10 +50,60 @@ class Jeu:
         # Initialisation de la grille sans placer les mines au début
         self.grille.creerGrille()
         self.grille.afficherGrille()
+        self.timer.reset()
+        
+    def traiterCoup(self, x, y, action):
+        """
+        Traite le coup du joueur. Découvre la case et place les mines si c'est la première action.
+
+        Parameters
+        ----------
+        x : int
+            coordonnée x de la case.
+        y : int
+            Coordonnée y de la case.
+        action : str
+            "d" pour découvrir la case, "f" pour placer un drapeau.
+
+        Returns
+        -------
+        None.
+
+        """
+        if self.premiereAction:
+            self.timer.start()
+            if action == "d":
+                self.grille.decouvrirCase(x,y)
+                self.grille.placerMines()
+                self.grille.placerNumeros()
+                self.grille.propagation(x,y)
+                self.premiereAction = False
+            elif action == "f":
+                self.grille.changeDrapeau(x,y)
+            else:
+                print("Action non existante.")
+        else :
+            if action == "d":
+                if self.grille.grille[x][y].isMine:
+                    self.grille.decouvrirCase(x,y)
+                else :
+                    self.grille.propagation(x, y)
+            elif action == "f":
+                self.grille.changeDrapeau(x,y)
+            else:
+                print("Action non existante.")
+        
+        if self.grille.victoire() or self.grille.defaite(x, y):
+            self.timer.stop()
 
     def jouer(self):
         """
         Démarre la boucle principale du jeu, permet au joueur d'entrer des coordonnées pour découvrir des cases.
+
+        Returns
+        -------
+        None.
+
         """
         # Initialisation du jeu
         self.initialiser_jeu()
@@ -70,31 +130,7 @@ class Jeu:
                 print("Vous avez perdu :(")
                 break
 
-    def traiterCoup(self, x: int, y: int, action: str):
-        """
-        Traite le coup du joueur. Découvre la case et place les mines si c'est la première action.
-        """
-        if self.premiereAction:
-            if action == "d":
-                self.grille.decouvrirCase(x,y)
-                self.grille.placerMines()
-                self.grille.placerNumeros()
-                self.grille.propagation(x,y)
-                self.premiereAction = False
-            elif action == "f":
-                self.grille.changeDrapeau(x,y)
-            else:
-                print("Action non existante.")
-        else :
-            if action == "d":
-                if self.grille.grille[x][y].isMine:
-                    self.grille.decouvrirCase(x,y)
-                else :
-                    self.grille.propagation(x, y)
-            elif action == "f":
-                self.grille.changeDrapeau(x,y)
-            else:
-                print("Action non existante.")
+
     
 
 
